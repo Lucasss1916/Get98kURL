@@ -3,8 +3,8 @@ export default {
     const url = new URL(request.url);
     const password = url.searchParams.get("password");
 
-    // 密码验证YOUR_PASSWORD修改为你自己想要的
-    const correctPassword = "YOUR_PASSWORD";
+    // 密码验证,更改为自己的密码
+    const correctPassword = "islucas1now";
     if (password !== correctPassword) {
       return new Response("❌ Password incorrect", { status: 401 });
     }
@@ -13,7 +13,8 @@ export default {
     const loginResp = await fetch("https://98kjc.top/api/v1/passport/auth/login", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0"
       },
       body: JSON.stringify({
         email: env.EMAIL,
@@ -47,13 +48,20 @@ export default {
     }
 
     // 第三步：访问订阅链接内容
-    const contentResp = await fetch(subscribeUrl);
-    const content = await contentResp.text(); // 可改为 .json() 若返回 JSON
+    // 【修改处】：添加了 headers 对象和 User-Agent
+    const contentResp = await fetch(subscribeUrl, {
+        method: "GET",
+        headers: {
+            "User-Agent": "Mozilla/5.0" 
+        }
+    });
+    
+    const content = await contentResp.text(); 
 
     return new Response(content, {
       status: 200,
       headers: {
-        "Content-Type": "text/plain"
+        "Content-Type": "text/plain; charset=utf-8" // 建议加上 charset=utf-8 防止乱码
       }
     });
   }
